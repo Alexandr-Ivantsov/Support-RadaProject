@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Поддержка — Название вашего приложения</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;max-width:760px;margin:40px auto;padding:0 16px;color:#111}
+    header{margin-bottom:18px}
+    form{display:grid;gap:10px}
+    label{font-weight:600}
+    input[type="text"],input[type="email"],textarea{width:100%;padding:8px;border:1px solid #ddd;border-radius:6px}
+    button{background:#007bff;color:#fff;padding:10px;border:0;border-radius:6px;cursor:pointer}
+    .note{font-size:90%;color:#555}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Поддержка — Название вашего приложения</h1>
+    <p class="note">Если у вас есть вопросы, баги или предложения — заполните форму ниже или напишите на <strong>alexandrivantsov.ios@gmail.com</strong>.</p>
+  </header>
+
+  <section>
+    <form id="support-form" action="https://formspree.io/f/ENTER_YOUR_FORM_ID" method="POST">
+      <label for="name">Имя</label>
+      <input id="name" name="name" type="text" required />
+
+      <label for="email">Email</label>
+      <input id="email" name="_replyto" type="email" required />
+
+      <label for="subject">Тема</label>
+      <input id="subject" name="subject" type="text" required />
+
+      <label for="message">Сообщение</label>
+      <textarea id="message" name="message" rows="6" required></textarea>
+
+      <input type="hidden" name="_subject" value="Support request from website" />
+      <button type="submit">Отправить</button>
+    </form>
+
+    <p class="note" style="margin-top:14px;">Или напишите напрямую: <strong>alexandrivantsov.ios@gmail.com</strong></p>
+  </section>
+
+  <script>
+    const form = document.getElement<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Поддержка — APP_NAME</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;max-width:760px;margin:40px auto;padding:0 16px;color:#111}
+    header{margin-bottom:18px}
+    form{display:grid;gap:10px}
+    label{font-weight:600}
+    input[type="text"],input[type="email"],textarea{width:100%;padding:8px;border:1px solid #ddd;border-radius:6px}
+    button{background:#007bff;color:#fff;padding:10px;border:0;border-radius:6px;cursor:pointer}
+    .note{font-size:90%;color:#555}
+    .success{color:green;margin-top:12px}
+    .error{color:#a00;margin-top:12px}
+    .small{font-size:85%}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Поддержка — APP_NAME</h1>
+    <p class="note">Есть вопросы, баги или предложения — заполните форму ниже. Для конфиденциальности адрес электронной почты скрыт; вы также можете показать его вручную.</p>
+  </header>
+
+  <section>
+    <form id="support-form" action="https://formspree.io/f/FORMSPREE_ID" method="POST" novalidate>
+      <label for="name">Имя</label>
+      <input id="name" name="name" type="text" required />
+
+      <label for="email">Email</label>
+      <input id="email" name="_replyto" type="email" required />
+
+      <label for="subject">Тема</label>
+      <input id="subject" name="subject" type="text" required />
+
+      <label for="message">Сообщение</label>
+      <textarea id="message" name="message" rows="6" required></textarea>
+
+      <!-- Honeypot: поле для ботов — пользователи его не заполняют -->
+      <div style="display:none">
+        <label>Leave this empty</label>
+        <input name="hidden_field" type="text" />
+      </div>
+
+      <input type="hidden" name="_subject" value="Support request from website" />
+      <button id="submit-btn" type="submit">Отправить</button>
+      <div id="form-feedback" role="status" aria-live="polite"></div>
+    </form>
+
+    <p class="note small" style="margin-top:14px;">
+      Или показать email: <strong id="contact-action" style="cursor:pointer;color:#007bff;text-decoration:underline">Показать адрес</strong>
+      <span id="contact-email" style="margin-left:8px"></span>
+    </p>
+  </section>
+
+  <script>
+    (function(){
+      // ========== Настройка ==========
+      const REAL_USER = 'alexandrivantsov.ios';
+      const REAL_DOMAIN = 'gmail.com';
+      const RATE_LIMIT_MS = 5000; // минимальный интервал между отправками с этого окна
+      const FORM = document.getElementById('support-form');
+      const BTN = document.getElementById('submit-btn');
+      const FEEDBACK = document.getElementById('form-feedback');
+      const ACTION = document.getElementById('contact-action');
+      const EMAIL_SPAN = document.getElementById('contact-email');
+      let lastSubmit = 0;
+
+      // ========== Показываем email по клику (скрыт до клика) ==========
+      ACTION.addEventListener('click', function(){
+        const addr = REAL_USER + '@' + REAL_DOMAIN;
+        EMAIL_SPAN.innerHTML = '<a href="mailto:' + addr + '">' + addr + '</a>';
+        try { navigator.clipboard && navigator.clipboard.writeText(addr); } catch(e){}
+        ACTION.style.display = 'none'; // скрыть кнопку после показа
+      });
+
+      // ========== Honeypot (серверная проверка у Formspree) ==========
+      // поле hidden_field оставлено в форме; если боты заполнят его, Formspree может отметить как спам.
+
+      // ========== Примитивная клиентская частотная защита ==========
+      FORM.addEventListener('submit', function(e){
+        const now = Date.now();
+        if (now - lastSubmit < RATE_LIMIT_MS) {
+          e.preventDefault();
+          FEEDBACK.className = 'error';
+          FEEDBACK.textContent = 'Подождите несколько секунд перед повторной отправкой.';
+          return;
+        }
+        lastSubmit = now;
+        BTN.disabled = true;
+        BTN.textContent = 'Отправляем...';
+        FEEDBACK.className = '';
+        FEEDBACK.textContent = '';
+        // Позволяем форме отправиться обычным POST'ом на Formspree
+        // Formspree вернёт статус и пришлёт письмо на ваш email (указан в настройках Formspree)
+      });
+
+      // ========== Обработка ответа без перезагрузки (fetch) — улучшение UX ==========
+      // Перехватываем отправку формы и делаем fetch, чтобы показать результат пользователю.
+      FORM.addEventListener('submit', function(event){
+        event.preventDefault();
+        const formData = new FormData(FORM);
+        // Если honeypot заполнен — не отправляем
+        if (formData.get('hidden_field')) {
+          FEEDBACK.className = 'error';
+          FEEDBACK.textContent = 'Ошибка при отправке.';
+          BTN.disabled = false;
+          BTN.textContent = 'Отправить';
+          return;
+        }
+        fetch(FORM.action, {
+          method: 'POST',
+          body: formData,
+          headers: { 'Accept': 'application/json' }
+        }).then(function(response){
+          BTN.disabled = false;
+          BTN.textContent = 'Отправить';
+          if (response.ok) {
+            FORM.reset();
+            FEEDBACK.className = 'success';
+            FEEDBACK.textContent = 'Спасибо — ваше сообщение отправлено.';
+          } else {
+            return response.json().then(function(data){
+              FEEDBACK.className = 'error';
+              FEEDBACK.textContent = (data && data.error) ? data.error : 'Ошибка отправки — попробуйте позже.';
+            });
+          }
+        }).catch(function(){
+          BTN.disabled = false;
+          BTN.textContent = 'Отправить';
+          FEEDBACK.className = 'error';
+          FEEDBACK.textContent = 'Сетевая ошибка — проверьте соединение и попробуйте снова.';
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
